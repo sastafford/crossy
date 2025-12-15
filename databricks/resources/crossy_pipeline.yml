@@ -1,0 +1,13 @@
+# A job running SQL queries on a SQL warehouse
+resources:
+  pipelines:
+    pipeline_crossy:
+      name: crossy
+      libraries:
+        - glob:
+            include: ../src/crossy_pipeline/transformations/**
+      schema: crossy
+      photon: true
+      catalog: stafford_1_classic_catalog
+      serverless: true
+      root_path: ../src/crossy_pipeline/transformations
