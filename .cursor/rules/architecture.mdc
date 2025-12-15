@@ -1,0 +1,52 @@
+---
+alwaysApply: true
+---
+## Project Memory
+
+This is a modern full-stack monorepo project where each application features a FastAPI backend with a Vanilla Javascript and CSS frontend and modern development tooling.  
+
+## Tech Stack
+
+**Environment Variables**
+
+All environment variables will be found under ./<app>/.env
+
+**Backend:**
+- Python with `uv` for package management
+- FastAPI for API framework
+- OpenAPI automatic client generation
+- Each application uses Python and FastAPI for its backend
+- Each application will specify their own persistence mechanism:
+  - Application 1 may use Oracle
+  - Application 2 may use MongoDB  
+  - Application 3 may use Databricks
+- All apps connect to their databases through Python libraries/drivers
+
+**Frontend:**
+- HTML5
+- Use Bootstrap as the frontend toolkit
+- Use the following primary colors in the user interface
+ - #FF3621
+ - #0B2026
+ - #EEEDE9
+ - #F9F7F4
+- DM Sans is the primary font choice
+- Do not cram text elements too close together
+- Use vanilla javascript. Avoid JavaScript frameworks
+- Bun for package management
+- Make sure that each application under this project have some user interface differences so that they look like separate applications. Include the version of the application in the title name. 
+
+## Development Workflow
+
+### Package Management
+- Use `uv add/remove` for Python dependencies, not manual edits to pyproject.toml
+- Use `bun add/remove` for frontend dependencies, not manual package.json edits
+- Always check if dependencies exist in the project before adding new ones
+
+**Development Tasks:**
+- "add a new API endpoint" → Creates FastAPI routes with proper patterns
+- "debug this error" → Analyzes logs and fixes issues
+- "install [package]" → Adds dependencies using uv (Python) or bun (frontend)
+- "generate the API client" → Regenerates API client from OpenAPI spec
+- "open the UI in playwright" → Opens the frontend app in Playwright browser for testing
+

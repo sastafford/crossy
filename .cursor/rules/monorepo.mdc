@@ -1,0 +1,67 @@
+---
+alwaysApply: true
+---
+
+# MONOREPO STRUCTURE
+
+This workspace contains multiple related applications that share common infrastructure and tooling.
+
+## Directory Structure
+
+/root_folder/
+├── .cursor/rules/ # Shared workspace rules
+├── shared/ # Shared code across applications (if needed)
+│ ├── common/ # Common utilities, types, helpers
+│ ├── models/ # Shared data models
+│ └── clients/ # Shared API clients
+├── app_1/ # Application 1
+│ ├── backend/ # FastAPI backend
+│ ├── frontend/ # HTML/JS/CSS frontend
+│ ├── sql/ # Database schemas
+│ ├── instructions/ # App-specific documentation
+│ ├── tests/ # Application tests
+│ └── .env.example # Environment template
+├── app_2/ # Application 2
+│ └── [same structure]
+└── README.md # Workspace overview
+
+
+## Shared Code Guidelines
+
+- Place truly shared code in `shared/` directory
+- Each shared module should have clear responsibility
+- Shared code must be well-documented and tested
+- Apps import shared code using relative paths: `from shared.common import ...`
+- Keep shared code minimal - prefer duplication over wrong abstraction
+- If the application rules conflict with the shared rules, then apply the application rules
+
+## Application Independence
+
+- Each app has its own `pyproject.toml` and dependencies
+- Each app can run independently
+- Apps have separate database schemas (can share database server)
+- Apps have independent versioning
+- Apps can have different deployment schedules
+
+## Development Workflow
+
+- Work on one application at a time
+- Run app-specific commands from app directory: `cd risky && uv run ...`
+- Keep app-specific configuration in app directories
+- Test changes to shared code across all dependent apps
+- Document breaking changes in shared code
+
+## Configuration Management
+
+- Workspace-level rules in `.cursor/rules/`
+- App-specific rules in `{app}/instructions/`
+- App-specific rules override workspace rules when conflicts occur
+- Keep sensitive config out of version control
+
+## Testing Strategy
+
+- Unit tests live with their modules
+- Integration tests in `{app}/tests/`
+- Shared code tests in `shared/tests/`
+- Run all tests before committing shared code changes
+- Each app maintains its own test coverage targets

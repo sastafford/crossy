@@ -1,0 +1,111 @@
+---
+alwaysApply: true
+---
+
+# ENVIRONMENT & CONFIGURATION
+
+## Environment Variables
+
+All applications use environment variables for configuration. Never hardcode credentials or environment-specific values.
+
+### Required Variables
+
+Each application must document its required environment variables in `{app}/.env.example`:
+
+### EXAMPLE .env file
+
+```bash
+# Database Connection
+DATABASE_HOST=localhost
+DATABASE_PORT=1521
+DATABASE_SERVICE=ORCL
+DATABASE_USER=app_user
+DATABASE_PASSWORD=changeme
+
+# Application Settings
+APP_NAME=risky
+APP_VERSION=1.0.0
+LOG_LEVEL=INFO
+ENVIRONMENT=development
+
+# API Configuration
+API_HOST=0.0.0.0
+API_PORT=8000
+API_PREFIX=/api/v1
+
+# Security
+SECRET_KEY=your-secret-key-here
+CORS_ORIGINS=http://localhost:3000,http://localhost:8000
+```
+
+### Environment Files
+
+- `.env.example` - Template with all variables (commit to repo)
+- `.env` - Actual secrets (never commit, add to .gitignore)
+- `.env.development` - Development defaults (optional)
+- `.env.test` - Test environment (optional)
+
+## Configuration Loading
+
+- Load environment variables at application startup
+- Validate required variables are present (fail fast if missing)
+- Use Pydantic Settings for type-safe configuration
+- Log configuration values (mask secrets)
+- Use sensible defaults where appropriate
+
+## Logging Standards
+
+- Use Python `logging` module
+- Configure log levels per environment (DEBUG in dev, INFO in prod)
+- Include request IDs for API calls
+- Log structured data (JSON format) in production
+- Never log sensitive data (passwords, tokens, PII)
+- Rotate log files in production
+
+### Log Format
+
+```python
+# Development: Human-readable
+[2025-10-30 10:15:23] INFO: Processing shipment SHIP-12345
+
+# Production: Structured JSON
+{"timestamp": "2025-10-30T10:15:23Z", "level": "INFO", "message": "Processing shipment", "shipment_id": "SHIP-12345", "request_id": "abc-123"}
+```
+
+## Secrets Management
+
+- Never commit secrets to version control
+- Use environment variables for all credentials
+- Rotate secrets regularly
+- Use different secrets per environment
+- Consider using a secrets manager (AWS Secrets Manager, HashiCorp Vault) for production
+
+## Deployment Considerations
+
+- Each app deploys independently
+- Use `uv export` to generate requirements.txt for deployment
+- Run database migrations before deploying code
+- Perform health checks after deployment
+- Have rollback procedures documented
+- Use blue-green or rolling deployments for zero downtime
+
+## Environment Types
+
+### Development
+- Relaxed security for ease of development
+- Detailed error messages and stack traces
+- Hot-reload enabled
+- Test data acceptable in database
+
+### Testing
+- Isolated test database
+- Mock external services
+- Consistent test data fixtures
+- Fast execution (parallelized when possible)
+
+### Production
+- Strict security settings
+- Generic error messages (log details)
+- Performance optimizations enabled
+- Real data, regular backups
+- Monitoring and alerting configured

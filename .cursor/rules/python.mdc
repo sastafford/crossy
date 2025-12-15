@@ -1,0 +1,30 @@
+---
+alwaysApply: true
+---
+
+All applications under this project will follow the following rules..
+
+# PYTHON
+
+- All backend code will be implemented using Python and the FastAPI library
+
+## Coding Standards
+
+- Use uv for all dependency management (uv add, uv run, uv sync)
+- Always use type hints with sdk types
+- Follow PEP 8 and Black formatting
+- Never hardcode credentials - use environment variables
+- Write docstrings for public APIs
+- Use descriptive variable names
+- Write defensive code with proper error handling
+- Test new features with pytest
+- Use Python 3.10+ features
+- Log API calls with request context
+
+## API Standards
+
+- Use FastAPI's automatic OpenAPI documentation
+- Document all endpoints with docstrings
+- Use proper HTTP status codes
+- Follow REST conventions for resource naming
+- Generate TypeScript/JavaScript clients from OpenAPI spec
