@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crossy v1.0.0 - Border Patrol Checkpoint Simulator</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts - DM Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h1 class="app-title mb-0">🚗 Crossy v1.0.0</h1>
+                    <p class="app-subtitle mb-0">Border Patrol Interior Checkpoint Crossing Simulator</p>
+                </div>
+                <div class="col-auto">
+                    <div class="mongodb-status">
+                        <span class="status-label">MongoDB:</span>
+                        <span class="status-indicator" id="mongodbIndicator">
+                            <span class="spinner-border spinner-border-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </span>
+                        </span>
+                        <span id="mongodbStatus">Checking...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-4">
+        <!-- Tab Navigation -->
+        <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="create-tab" data-bs-toggle="tab" data-bs-target="#create-pane" 
+                        type="button" role="tab" aria-controls="create-pane" aria-selected="true">
+                    Create
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="view-tab" data-bs-toggle="tab" data-bs-target="#view-pane" 
+                        type="button" role="tab" aria-controls="view-pane" aria-selected="false">
+                    Edit
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="reset-tab" data-bs-toggle="tab" data-bs-target="#reset-pane" 
+                        type="button" role="tab" aria-controls="reset-pane" aria-selected="false">
+                    Reset
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="mainTabContent">
+            <!-- Create Tab -->
+            <div class="tab-pane fade show active" id="create-pane" role="tabpanel" aria-labelledby="create-tab">
+                <!-- Controls Section -->
+                <div class="controls-section mb-4">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <div class="btn-group view-toggle" role="group" aria-label="View mode">
+                                <input type="radio" class="btn-check" name="viewMode" id="viewForm" checked>
+                                <label class="btn btn-outline-secondary" for="viewForm">📝 Form View</label>
+                                
+                                <input type="radio" class="btn-check" name="viewMode" id="viewJson">
+                                <label class="btn btn-outline-secondary" for="viewJson">📄 JSON View</label>
+                            </div>
+                        </div>
+                        <div class="col text-end">
+                            <button type="button" class="btn btn-outline-primary btn-lg" id="generateBtn">
+                                Generate
+                            </button>
+                            <button type="button" class="btn btn-primary btn-lg" id="submitBtn">
+                                SUBMIT
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+        <!-- Form View -->
+        <div id="formView" class="view-container">
+            <!-- Vehicle Details -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Vehicle Details</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="licensePlate" class="form-label">License Plate Number</label>
+                            <input type="text" class="form-control" id="licensePlate" 
+                                   placeholder="TX-ABC-123" pattern="[A-Z]{2}-[A-Z]{3}-[0-9]{3}">
+                            <div class="form-text">Format: XX-YYY-123</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="vehicleType" class="form-label">Vehicle Type</label>
+                            <select class="form-select" id="vehicleType">
+                                <option value="">Select vehicle type...</option>
+                                <option value="sedan">Sedan</option>
+                                <option value="truck">Truck</option>
+                                <option value="motorcycle">Motorcycle</option>
+                                <option value="tractor trailer">Tractor Trailer</option>
+                                <option value="van">Van</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ownerName" class="form-label">Owner Name</label>
+                            <input type="text" class="form-control" id="ownerName" placeholder="John Doe">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="registrationState" class="form-label">Registration State</label>
+                            <select class="form-select" id="registrationState">
+                                <option value="">Select state...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="expirationDate" class="form-label">Expiration Date</label>
+                            <input type="date" class="form-control" id="expirationDate">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="passengerCount" class="form-label">Passenger Count</label>
+                            <input type="number" class="form-control" id="passengerCount" 
+                                   min="0" max="50" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crossing Event Data -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Crossing Event Data</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="timestamp" class="form-label">Timestamp</label>
+                            <input type="datetime-local" class="form-control" id="timestamp">
+                            <div class="form-text">ISO 8601 format</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="checkpoint" class="form-label">Interior Checkpoint</label>
+                            <select class="form-select" id="checkpoint">
+                                <option value="">Select checkpoint...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="direction" class="form-label">Direction</label>
+                            <select class="form-select" id="direction">
+                                <option value="">Select direction...</option>
+                                <option value="Inbound">Inbound</option>
+                                <option value="Outbound">Outbound</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="laneAssignment" class="form-label">Lane Assignment</label>
+                            <input type="number" class="form-control" id="laneAssignment" 
+                                   min="1" max="10" placeholder="1-10">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="crossingPurpose" class="form-label">Crossing Purpose</label>
+                            <select class="form-select" id="crossingPurpose">
+                                <option value="">Select purpose...</option>
+                                <option value="personal">Personal</option>
+                                <option value="business">Business</option>
+                                <option value="shipping">Shipping</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="secondaryInspection">
+                                <label class="form-check-label" for="secondaryInspection">
+                                    Secondary Inspection Required
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cargo Information (conditional) -->
+            <div class="card mb-4" id="cargoSection" style="display: none;">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Cargo Information</h3>
+                    <small class="text-muted">Only for shipping crossings</small>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="manifestId" class="form-label">Manifest ID</label>
+                            <input type="text" class="form-control" id="manifestId" placeholder="ABCD2500123456">
+                            <div class="form-text">Format: SCAC (4 letters) + Year (2 digits) + Sequence</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cargoType" class="form-label">Cargo Type</label>
+                            <select class="form-select" id="cargoType">
+                                <option value="">Select cargo type...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="containerId" class="form-label">Container ID</label>
+                            <input type="text" class="form-control" id="containerId" 
+                                   placeholder="CONT33445X" maxlength="10">
+                            <div class="form-text">10 alphanumeric characters</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check mt-4">
+                                <input class="form-check-input" type="checkbox" id="hazardousMaterial">
+                                <label class="form-check-label" for="hazardousMaterial">
+                                    Hazardous Material
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JSON View -->
+        <div id="jsonView" class="view-container" style="display: none;">
+            <!-- Vehicle Details JSON -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Vehicle Details</h3>
+                </div>
+                <div class="card-body">
+                    <textarea class="form-control json-editor" id="vehicleJson" rows="10"></textarea>
+                </div>
+            </div>
+
+            <!-- Crossing Event JSON -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Crossing Event Data</h3>
+                </div>
+                <div class="card-body">
+                    <textarea class="form-control json-editor" id="crossingJson" rows="10"></textarea>
+                </div>
+            </div>
+
+            <!-- Cargo Information JSON -->
+            <div class="card mb-4" id="cargoJsonSection">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Cargo Information</h3>
+                    <small class="text-muted">Only for shipping crossings</small>
+                </div>
+                <div class="card-body">
+                    <textarea class="form-control json-editor" id="cargoJson" rows="8"></textarea>
+                    <div class="form-text mt-2" id="cargoJsonNote"></div>
+                </div>
+            </div>
+            </div>
+            </div>
+
+            <!-- View Tab -->
+            <div class="tab-pane fade" id="view-pane" role="tabpanel" aria-labelledby="view-tab">
+                <!-- Collection Selector -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">Select Collection</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label for="collectionSelect" class="form-label">Collection Type</label>
+                                <select class="form-select" id="collectionSelect">
+                                    <option value="">Select a collection...</option>
+                                    <option value="vehicle">Vehicle</option>
+                                    <option value="crossing">Crossing</option>
+                                    <option value="cargo_manifest">Cargo Manifest</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-text mt-2" id="collectionStatusNote"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Document Selector -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">Select Document</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label for="documentSelect" class="form-label">Document ID</label>
+                                <select class="form-select" id="documentSelect" disabled>
+                                    <option value="">Select a collection first...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JSON Viewer -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">Document</h3>
+                    </div>
+                    <div class="card-body">
+                        <textarea class="form-control json-editor" id="documentViewer" rows="20"></textarea>
+                        <div class="form-text mt-2" id="documentViewerNote">No document selected</div>
+                        <div class="mt-3 text-end">
+                            <button type="button" class="btn btn-danger me-2" id="deleteDocumentBtn" disabled>
+                                Delete
+                            </button>
+                            <button type="button" class="btn btn-primary" id="saveDocumentBtn" disabled>
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reset Tab -->
+            <div class="tab-pane fade" id="reset-pane" role="tabpanel" aria-labelledby="reset-tab">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 class="card-title mb-4">Reset Database Collections</h3>
+                        <p class="text-muted mb-4">
+                            This will permanently delete all documents from the following collections:
+                        </p>
+                        <ul class="list-unstyled mb-4">
+                            <li>• Vehicle</li>
+                            <li>• Crossing</li>
+                            <li>• Cargo Manifest</li>
+                        </ul>
+                        <p class="text-danger mb-4"><strong>This action cannot be undone.</strong></p>
+                        <button type="button" class="btn btn-danger btn-lg" id="resetBtn">
+                            Reset
+                        </button>
+                        <div class="mt-3" id="resetStatus"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="notificationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto" id="toastTitle">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastBody">
+                Message content
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Application JS -->
+    <script type="module" src="/static/js/app.js"></script>
+</body>
+</html>
+
