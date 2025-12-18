@@ -7,9 +7,8 @@ resources:
           notebook_task:
             notebook_path: ../src/mongocdc_job/export_collection_cdc.ipynb
             base_parameters:
-              mongodb_uri: ""
-              database_name: ""
-              collection_name: ""
+              database_name: "crossy"
+              collection_name: "vehicle"
               output_path: ""
             source: WORKSPACE
           job_cluster_key: Job_cluster
